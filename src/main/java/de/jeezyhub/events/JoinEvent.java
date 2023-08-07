@@ -9,6 +9,9 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onJoinEvent(PlayerJoinEvent e) {
+
+        e.getPlayer().setWalkSpeed(1);
+
         e.getPlayer().sendMessage(new String[] {
                 "\n",
                 " §9§lMineral Network §7§l(§6§lSeason §f§l1§7§l)\n",

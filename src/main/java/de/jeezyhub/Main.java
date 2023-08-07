@@ -2,6 +2,9 @@ package de.jeezyhub;
 
 
 import de.jeezyhub.colors.Color;
+import de.jeezyhub.events.BreakBlocksEvent;
+import de.jeezyhub.events.EntityDamageByEntityEvent;
+import de.jeezyhub.events.FoodLevelChangeEvent;
 import de.jeezyhub.events.JoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +18,9 @@ public class Main extends JavaPlugin {
 
     private void EventsRegister() {
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new BreakBlocksEvent(), this);
+        getServer().getPluginManager().registerEvents(new FoodLevelChangeEvent(), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageByEntityEvent(), this);
     }
 
     @Override
