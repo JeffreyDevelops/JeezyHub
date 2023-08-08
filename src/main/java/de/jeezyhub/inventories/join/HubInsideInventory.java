@@ -8,15 +8,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HubInsideInventory {
 
     Inventory hubInsideInventory;
 
+    ItemStack practice = new ItemStack(Material.DIAMOND_SWORD, 1);
+
     BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
+
+    boolean timerRunning = false;
 
 
     public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
@@ -24,10 +26,10 @@ public class HubInsideInventory {
             if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9§lPractice")) {
                 bungeeChannelApi.sendToServer((Player) e.getWhoClicked());
                 e.getWhoClicked().closeInventory();
-                }
             }
-        e.setCancelled(true);
         }
+        e.setCancelled(true);
+    }
 
     private void createInventory() {
         hubInsideInventory = Bukkit.createInventory(null, 9, "§9§lGame§f§lmodes");
@@ -47,14 +49,14 @@ public class HubInsideInventory {
     }
 
     private void setActualItem() {
-        ItemStack practice = new ItemStack(Material.DIAMOND_SWORD, 1);
+
         ItemMeta practiceMeta = practice.getItemMeta();
         practiceMeta.setDisplayName("§9§lPractice");
         List<String> desc = new ArrayList<>();
         desc.add("§7PvPBots, 1v1s, 2v2s");
         desc.add("§7Duels, Events & Parties");
         desc.add("                          ");
-        desc.add("§fPlayers: §9§l"+0);
+        desc.add("§fPlayers: §9§l" + bungeeChannelApi.getSelectedPlayerCount());
         desc.add("                          ");
         desc.add("§fClick to §9join§7!");
         practiceMeta.setLore(desc);
@@ -67,5 +69,24 @@ public class HubInsideInventory {
         setPlaceHolders();
         setActualItem();
         e.getPlayer().openInventory(hubInsideInventory);
+        scheduleHubItemSet(practice);
+        timerRunning = true;
+
+    }
+
+    public void scheduleHubItemSet(ItemStack practice) {
+
+        if (timerRunning) return;
+
+        Timer time = new Timer();
+        TimerTask tipsSendTask = new TimerTask() {
+            @Override
+            public void run() {
+                hubInsideInventory.remove(practice);
+                setActualItem();
+                System.out.println("set");
+            }
+        };
+        time.scheduleAtFixedRate(tipsSendTask, 5000, 5000);
     }
 }
