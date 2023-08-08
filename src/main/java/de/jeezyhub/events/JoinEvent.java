@@ -2,14 +2,18 @@ package de.jeezyhub.events;
 
 
 import de.jeezyhub.inventories.join.HubFrontInventory;
+import de.jeezyhub.scoreboard.Scoreboard;
 import de.jeezyhub.utils.FakePlayerChecker;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import static de.jeezyhub.utils.ArrayStorage.boards;
 
 public class JoinEvent implements Listener {
 
     HubFrontInventory hubFrontInventory = new HubFrontInventory();
+    Scoreboard scoreboard = new Scoreboard();
 
     @EventHandler
     public void onJoinEvent(PlayerJoinEvent e) {
@@ -32,6 +36,9 @@ public class JoinEvent implements Listener {
                 " §9§l♦ §f§lTwitter: §9§ltwitter.com/MineralServer\n",
                 "\n"
         });
+        FastBoard board = new FastBoard(e.getPlayer());
+        scoreboard.updateBoard(board);
+        boards.put(e.getPlayer().getUniqueId(), board);
     }
 
     private void setHubItems(PlayerJoinEvent e) {

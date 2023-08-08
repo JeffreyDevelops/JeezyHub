@@ -49,7 +49,49 @@
       <artifactId>JeezyCore</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
+      <dependency>
+        <groupId>fr.mrmicky</groupId>
+        <artifactId>fastboard</artifactId>
+        <version>2.0.0</version>
+      </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <relocations>
+            <relocation>
+              <pattern>fr.mrmicky.fastboard</pattern>
+              <!-- Replace 'com.yourpackage' with the package of your plugin ! -->
+              <shadedPattern>de.jeezyhub</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -4,14 +4,25 @@ package de.jeezyhub;
 import de.jeezyhub.colors.Color;
 import de.jeezyhub.events.*;
 import de.jeezyhub.inventories.JeezyHubInventories;
+import de.jeezyhub.scoreboard.Scoreboard;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.plugin.java.JavaPlugin;
+import static de.jeezyhub.utils.ArrayStorage.boards;
 
 public class Main extends JavaPlugin {
+
+    Scoreboard scoreboard = new Scoreboard();
+
 
     @Override
     public void onEnable() {
         System.out.println(Color.WHITE_BOLD+"[JeezyDevelopment]"+Color.GREEN_BOLD+" Successfully"+Color.CYAN_BOLD+" started JeezyHub coded by JeezyDevelopment!"+Color.RESET);
         EventsRegister();
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            for (FastBoard board : boards.values()) {
+                scoreboard.updateBoard(board);
+            }
+        }, 0, 20);
     }
 
     private void EventsRegister() {
