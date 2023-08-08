@@ -3,6 +3,7 @@ package de.jeezyhub;
 
 import de.jeezyhub.colors.Color;
 import de.jeezyhub.events.*;
+import de.jeezyhub.inventories.JeezyHubInventories;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -19,6 +20,8 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FoodLevelChangeEvent(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractEvent(), this);
+        getServer().getPluginManager().registerEvents(new JeezyHubInventories(), this);
     }
 
     @Override
