@@ -6,6 +6,7 @@ import de.jeezyhub.scoreboard.Scoreboard;
 import de.jeezyhub.utils.FakePlayerChecker;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import static de.jeezyhub.utils.ArrayStorage.boards;
@@ -15,7 +16,7 @@ public class JoinEvent implements Listener {
     HubFrontInventory hubFrontInventory = new HubFrontInventory();
     Scoreboard scoreboard = new Scoreboard();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoinEvent(PlayerJoinEvent e) {
         if (FakePlayerChecker.isFakePlayer(e.getPlayer())) return;
 
@@ -37,7 +38,7 @@ public class JoinEvent implements Listener {
                 "\n"
         });
         FastBoard board = new FastBoard(e.getPlayer());
-        scoreboard.updateBoard(board);
+        scoreboard.updateBoardOnJoin(board, e);
         boards.put(e.getPlayer().getUniqueId(), board);
     }
 
