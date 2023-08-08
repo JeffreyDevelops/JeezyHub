@@ -4,15 +4,14 @@ package de.jeezyhub;
 import de.jeezyhub.colors.Color;
 import de.jeezyhub.events.*;
 import de.jeezyhub.inventories.JeezyHubInventories;
-import de.jeezyhub.scoreboard.Scoreboard;
+import de.jeezyhub.utils.BungeeChannelApi;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.plugin.java.JavaPlugin;
 import static de.jeezyhub.utils.ArrayStorage.boards;
 
 public class Main extends JavaPlugin {
 
-    Scoreboard scoreboard = new Scoreboard();
-
+    BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
 
     @Override
     public void onEnable() {
@@ -20,7 +19,9 @@ public class Main extends JavaPlugin {
         EventsRegister();
         getServer().getScheduler().runTaskTimer(this, () -> {
             for (FastBoard board : boards.values()) {
-                scoreboard.updateBoard(board);
+                board.updateTitle(board.getTitle());
+                board.updateLines(board.getLines());
+                board.updateLine(1,"§fPlayers§7: §9"+bungeeChannelApi.allPlayerCount());
             }
         }, 0, 20);
     }
@@ -33,6 +34,8 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerCommandPreprocessEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractEvent(), this);
         getServer().getPluginManager().registerEvents(new JeezyHubInventories(), this);
+        getServer().getPluginManager().registerEvents(new DropItemsEvent(), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageEvent(), this);
     }
 
     @Override
