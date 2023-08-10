@@ -1,5 +1,6 @@
 package de.jeezyhub.inventories.join;
 
+import de.jeezyhub.queue.QueueManager;
 import de.jeezyhub.utils.BungeeChannelApi;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,10 +23,12 @@ public class HubInsideInventory {
 
     BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
 
+    QueueManager queueManager = new QueueManager();
+
     public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
         if (e.getInventory().getTitle().contains("§9§lGame§f§lmodes")) {
             if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9§lPractice")) {
-                bungeeChannelApi.sendToServer((Player) e.getWhoClicked());
+                queueManager.add(e);
                 e.getWhoClicked().closeInventory();
             }
         }

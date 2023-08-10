@@ -18,7 +18,7 @@ public class PlayerQuitEvent implements Listener {
         }
 
         perPlayerInventory.remove(e.getPlayer().getUniqueId());
-        System.out.println(perPlayerInventory);
         perPlayerInventoryOpened.remove(e.getPlayer().getUniqueId());
+        queueStorage.remove(e.getPlayer());
     }
 }
