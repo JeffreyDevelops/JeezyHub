@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 public class BungeeChannelApi {
     int allPlayerCount = 0;
-    int selectedPlayerCount = 0;
+    public static int selectedPlayerCount = 0;
     io.github.leonardosnt.bungeechannelapi.BungeeChannelApi api = io.github.leonardosnt.bungeechannelapi.BungeeChannelApi.of(Main.getPlugin(Main.class));
 
     public void sendToServer(Player p) {
@@ -23,16 +23,13 @@ public class BungeeChannelApi {
     return allPlayerCount;
     }
 
-    public int getSelectedPlayerCount() {
+    public void getSelectedPlayerCount() {
         try {
             api.getPlayerCount("practice-NA")
                     .whenComplete((oneServerPlayerCount, error) -> {
-                        System.out.println(oneServerPlayerCount);
                         selectedPlayerCount = oneServerPlayerCount;
-                        System.out.println(selectedPlayerCount);
                     });
         } catch (Exception e) {
         }
-        return selectedPlayerCount;
     }
 }

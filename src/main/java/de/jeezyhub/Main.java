@@ -28,6 +28,7 @@ public class Main extends JavaPlugin {
 
     private void EventsRegister() {
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
         getServer().getPluginManager().registerEvents(new BreakBlocksEvent(), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChangeEvent(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityEvent(), this);

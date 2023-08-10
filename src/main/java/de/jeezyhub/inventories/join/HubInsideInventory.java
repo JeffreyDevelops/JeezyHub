@@ -10,6 +10,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+import static de.jeezyhub.utils.ArrayStorage.perPlayerInventory;
+import static de.jeezyhub.utils.ArrayStorage.perPlayerInventoryOpened;
+import static de.jeezyhub.utils.BungeeChannelApi.selectedPlayerCount;
+
 public class HubInsideInventory {
 
     Inventory hubInsideInventory;
@@ -17,9 +21,6 @@ public class HubInsideInventory {
     ItemStack practice = new ItemStack(Material.DIAMOND_SWORD, 1);
 
     BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
-
-    boolean timerRunning = false;
-
 
     public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
         if (e.getInventory().getTitle().contains("§9§lGame§f§lmodes")) {
@@ -48,45 +49,79 @@ public class HubInsideInventory {
         }
     }
 
-    private void setActualItem() {
-
+    private void setActualItem(org.bukkit.event.player.PlayerInteractEvent e) {
         ItemMeta practiceMeta = practice.getItemMeta();
         practiceMeta.setDisplayName("§9§lPractice");
         List<String> desc = new ArrayList<>();
         desc.add("§7PvPBots, 1v1s, 2v2s");
         desc.add("§7Duels, Events & Parties");
         desc.add("                          ");
-        desc.add("§fPlayers: §9§l" + bungeeChannelApi.getSelectedPlayerCount());
-        desc.add("                          ");
-        desc.add("§fClick to §9join§7!");
-        practiceMeta.setLore(desc);
-        practice.setItemMeta(practiceMeta);
-        hubInsideInventory.setItem(4, practice);
+        bungeeChannelApi.getSelectedPlayerCount();
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    this.sleep(40);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                desc.add("§fPlayers: §9§l" + selectedPlayerCount);
+                desc.add("                          ");
+                desc.add("§fClick to §9join§7!");
+                practiceMeta.setLore(desc);
+                practice.setItemMeta(practiceMeta);
+                perPlayerInventory.get(e.getPlayer().getUniqueId()).setItem(4, practice);
+            }
+        }.start();
     }
 
     public void openInv(org.bukkit.event.player.PlayerInteractEvent e) {
         createInventory();
         setPlaceHolders();
-        setActualItem();
-        e.getPlayer().openInventory(hubInsideInventory);
-        scheduleHubItemSet(practice);
-        timerRunning = true;
+        perPlayerInventory.put(e.getPlayer().getUniqueId(), hubInsideInventory);
+        setActualItem(e);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    this.sleep(40);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                e.getPlayer().openInventory(perPlayerInventory.get(e.getPlayer().getUniqueId()));
+                System.out.println(perPlayerInventoryOpened.get(e.getPlayer().getUniqueId()));
+                if (perPlayerInventoryOpened.containsKey(e.getPlayer().getUniqueId())) {
+                    if (perPlayerInventoryOpened.get(e.getPlayer().getUniqueId())) {
+                        System.out.println("RETURNED HERE");
+                        return;
+                    }
+                }
+                perPlayerInventoryOpened.put(e.getPlayer().getUniqueId(), true);
+                scheduleHubItems(e);
+
+            }
+        }.start();
 
     }
 
-    public void scheduleHubItemSet(ItemStack practice) {
-
-        if (timerRunning) return;
+    public void scheduleHubItems(org.bukkit.event.player.PlayerInteractEvent e) {
 
         Timer time = new Timer();
-        TimerTask tipsSendTask = new TimerTask() {
+        TimerTask timeSchedule = new TimerTask() {
             @Override
             public void run() {
-                hubInsideInventory.remove(practice);
-                setActualItem();
-                System.out.println("set");
+                if (!perPlayerInventory.containsKey(e.getPlayer().getUniqueId())) {
+                    System.out.println("STOPPED");
+                    time.purge();
+                    time.cancel();
+                    return;
+                }
+                setActualItem(e);
+                System.out.println("working");
             }
         };
-        time.scheduleAtFixedRate(tipsSendTask, 5000, 5000);
+        time.scheduleAtFixedRate(timeSchedule, 2000, 2000);
     }
 }

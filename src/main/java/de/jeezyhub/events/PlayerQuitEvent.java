@@ -4,7 +4,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import static de.jeezyhub.utils.ArrayStorage.boards;
+import static de.jeezyhub.utils.ArrayStorage.*;
 
 public class PlayerQuitEvent implements Listener {
 
@@ -16,5 +16,9 @@ public class PlayerQuitEvent implements Listener {
         if (board != null) {
             board.delete();
         }
+
+        perPlayerInventory.remove(e.getPlayer().getUniqueId());
+        System.out.println(perPlayerInventory);
+        perPlayerInventoryOpened.remove(e.getPlayer().getUniqueId());
     }
 }
