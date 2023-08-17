@@ -3,18 +3,23 @@ package de.jeezyhub.events;
 
 import de.jeezyhub.inventories.join.HubFrontInventory;
 import de.jeezyhub.scoreboard.Scoreboard;
+import de.jeezyhub.utils.BungeeChannelApi;
 import de.jeezyhub.utils.FakePlayerChecker;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import static de.jeezyhub.utils.ArrayStorage.boards;
+
+import static de.jeezyhub.utils.ArrayStorage.*;
+import static de.jeezyhub.utils.ArrayStorage.queueStorage;
 
 public class JoinEvent implements Listener {
 
     HubFrontInventory hubFrontInventory = new HubFrontInventory();
     Scoreboard scoreboard = new Scoreboard();
+
+    BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoinEvent(PlayerJoinEvent e) {
@@ -40,6 +45,12 @@ public class JoinEvent implements Listener {
         FastBoard board = new FastBoard(e.getPlayer());
         scoreboard.updateBoardOnJoin(board, e);
         boards.put(e.getPlayer().getUniqueId(), board);
+
+        for (FastBoard updateBoard : boardsQueue.values()) {
+            updateBoard.updateTitle(updateBoard.getTitle());
+            updateBoard.updateLines(updateBoard.getLines());
+            updateBoard.updateLine(2," §9§l♦ §fPlayers§7: §9"+bungeeChannelApi.allPlayerCount());
+        }
     }
 
     private void setHubItems(PlayerJoinEvent e) {

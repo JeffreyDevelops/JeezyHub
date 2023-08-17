@@ -9,6 +9,7 @@ import de.jeezyhub.utils.BungeeChannelApi;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.plugin.java.JavaPlugin;
 import static de.jeezyhub.utils.ArrayStorage.boards;
+import static de.jeezyhub.utils.ArrayStorage.boardsQueue;
 
 public class Main extends JavaPlugin {
 
@@ -25,7 +26,14 @@ public class Main extends JavaPlugin {
             for (FastBoard board : boards.values()) {
                 board.updateTitle(board.getTitle());
                 board.updateLines(board.getLines());
-                board.updateLine(1,"§fPlayers§7: §9"+bungeeChannelApi.allPlayerCount());
+                board.updateLine(2," §9§l♦ §fPlayers§7: §9"+bungeeChannelApi.allPlayerCount());
+            }
+        }, 0, 20);
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            for (FastBoard board : boardsQueue.values()) {
+                board.updateTitle(board.getTitle());
+                board.updateLines(board.getLines());
+                board.updateLine(2," §9§l♦ §fPlayers§7: §9"+bungeeChannelApi.allPlayerCount());
             }
         }, 0, 20);
     }

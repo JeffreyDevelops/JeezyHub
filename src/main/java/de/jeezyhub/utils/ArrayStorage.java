@@ -13,6 +13,8 @@ public class ArrayStorage {
 
     public static final Map<UUID, FastBoard> boards = new HashMap<>();
 
+    public static final Map<UUID, FastBoard> boardsQueue = new HashMap<>();
+
    public static HashMap<UUID, Inventory> perPlayerInventory = new HashMap<>();
 
    public static HashMap<UUID, Boolean> perPlayerInventoryOpened = new HashMap<>();

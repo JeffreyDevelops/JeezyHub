@@ -1,15 +1,18 @@
 package de.jeezyhub.queue;
 
+import de.jeezyhub.scoreboard.Scoreboard;
 import de.jeezyhub.utils.BungeeChannelApi;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+
 import java.util.Timer;
 import java.util.TimerTask;
-import static de.jeezyhub.utils.ArrayStorage.queueStorage;
+
+import static de.jeezyhub.utils.ArrayStorage.*;
 
 public class QueueManager {
     BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
-
-    Timer time = new Timer();
 
     public void add(org.bukkit.event.inventory.InventoryClickEvent e) {
         if (inQueue(e)) return;
@@ -20,6 +23,18 @@ public class QueueManager {
         queueStorage.add((Player) e.getWhoClicked());
         System.out.println(queueStorage);
         e.getWhoClicked().sendMessage("§7You §2successfully §7entered the queue place: §7[§9"+(queueStorage.size())+"§7].");
+
+        Scoreboard scoreboard = new Scoreboard();
+        FastBoard board = new FastBoard((Player) e.getWhoClicked());
+        scoreboard.updateBoardOnQueueEntry(board, e);
+        boardsQueue.put(e.getWhoClicked().getUniqueId(), board);
+
+        QueueManager queueManager = new QueueManager();
+        for (FastBoard updateBoard : boardsQueue.values()) {
+            updateBoard.updateTitle(updateBoard.getTitle());
+            updateBoard.updateLines(updateBoard.getLines());
+            updateBoard.updateLine(7," §9§l♦ §f§l"+queueManager.queuePlace(updateBoard.getPlayer())+" §7§l/ §9§l"+queueStorage.size());
+        }
     }
 
     private void remove(int index) {
@@ -33,6 +48,10 @@ public class QueueManager {
         return queueStorage.contains((Player) e.getWhoClicked());
     }
 
+    public int queuePlace(Player p) {
+        return queueStorage.indexOf(p.getPlayer()) + 1;
+    }
+
     private void sendToServer(int index) {
         bungeeChannelApi.sendToServer(queueStorage.get(index));
     }
@@ -40,6 +59,10 @@ public class QueueManager {
 
     int indexAddUp = 0;
     public void scheduleServerEntry() {
+
+        QueueManager queueManager = new QueueManager();
+
+        Timer time = new Timer();
         TimerTask timeSchedule = new TimerTask() {
             @Override
             public void run() {
@@ -50,8 +73,14 @@ public class QueueManager {
 
                 sendToServer(indexAddUp);
                 remove(indexAddUp);
-                indexAddUp --;
+                indexAddUp--;
                 indexAddUp++;
+
+                for (FastBoard updateBoard : boardsQueue.values()) {
+                    updateBoard.updateTitle(updateBoard.getTitle());
+                    updateBoard.updateLines(updateBoard.getLines());
+                    updateBoard.updateLine(7," §9§l♦ §f§l"+queueManager.queuePlace(updateBoard.getPlayer())+" §7§l/ §9§l"+queueStorage.size());
+                }
             }
         };
         time.scheduleAtFixedRate(timeSchedule, 10000, 10000);
