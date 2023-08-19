@@ -21,4 +21,6 @@ public class ArrayStorage {
 
    public static ArrayList<Player> queueStorage = new ArrayList<>();
 
+   public static HashMap<Player, Inventory> settingsMap = new HashMap<>();
+
 }

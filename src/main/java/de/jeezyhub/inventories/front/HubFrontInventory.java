@@ -1,4 +1,4 @@
-package de.jeezyhub.inventories.join;
+package de.jeezyhub.inventories.front;
 
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -16,6 +16,13 @@ public class HubFrontInventory {
             playerInventory(e).setItem(4, selector);
         }
 
+        public void setSettingsOnJoin(PlayerJoinEvent e) {
+            ItemStack settings = new ItemStack(Material.REDSTONE_COMPARATOR, 1);
+            ItemMeta settingsMeta = settings.getItemMeta();
+            settingsMeta.setDisplayName("§9Settings");
+            settings.setItemMeta(settingsMeta);
+            playerInventory(e).setItem(8, settings);
+        }
 
         private Inventory playerInventory(PlayerJoinEvent e) {
             e.getPlayer().getInventory().setHeldItemSlot(4);

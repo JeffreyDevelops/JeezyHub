@@ -1,6 +1,7 @@
 package de.jeezyhub.inventories;
 
-import de.jeezyhub.inventories.join.HubInsideInventory;
+import de.jeezyhub.inventories.compass.HubCompassInsideInventory;
+import de.jeezyhub.inventories.settings.HubSettingsInsideInventory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -12,8 +13,11 @@ public class JeezyHubInventories implements Listener {
             return;
         }
 
-        HubInsideInventory hubInsideInventory = new HubInsideInventory();
-        hubInsideInventory.run(e);
+        HubCompassInsideInventory hubCompassInsideInventory = new HubCompassInsideInventory();
+        hubCompassInsideInventory.run(e);
+
+        HubSettingsInsideInventory hubSettingsInsideInventory = new HubSettingsInsideInventory();
+        hubSettingsInsideInventory.run(e);
 
     }
 }

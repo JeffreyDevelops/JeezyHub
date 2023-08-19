@@ -1,7 +1,6 @@
 package de.jeezyhub.events;
 
-
-import de.jeezyhub.inventories.join.HubFrontInventory;
+import de.jeezyhub.inventories.front.HubFrontInventory;
 import de.jeezyhub.scoreboard.Scoreboard;
 import de.jeezyhub.utils.BungeeChannelApi;
 import de.jeezyhub.utils.FakePlayerChecker;
@@ -10,9 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
 import static de.jeezyhub.utils.ArrayStorage.*;
-import static de.jeezyhub.utils.ArrayStorage.queueStorage;
+
 
 public class JoinEvent implements Listener {
 
@@ -55,5 +53,6 @@ public class JoinEvent implements Listener {
 
     private void setHubItems(PlayerJoinEvent e) {
         hubFrontInventory.setCompassOnJoin(e);
+        hubFrontInventory.setSettingsOnJoin(e);
     }
 }

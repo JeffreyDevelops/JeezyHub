@@ -1,10 +1,9 @@
-package de.jeezyhub.inventories.join;
+package de.jeezyhub.inventories.compass;
 
 import de.jeezyhub.queue.QueueManager;
 import de.jeezyhub.utils.BungeeChannelApi;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,7 +14,7 @@ import static de.jeezyhub.utils.ArrayStorage.perPlayerInventory;
 import static de.jeezyhub.utils.ArrayStorage.perPlayerInventoryOpened;
 import static de.jeezyhub.utils.BungeeChannelApi.selectedPlayerCount;
 
-public class HubInsideInventory {
+public class HubCompassInsideInventory {
 
     Inventory hubInsideInventory;
 
