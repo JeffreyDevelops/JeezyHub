@@ -68,14 +68,15 @@ public class HubSettingsInsideInventory {
         friendsList.add("§cDisabled");
 
         System.out.println(friendsSQL.friendsStatus);
+        System.out.println(friendsSQL.playerUUID);
 
         if (friendsSQL.playerUUID != null) {
             if (friendsSQL.friendsStatus) {
-                friendsList.remove(0);
-                friendsList.add(0, "§9§l♦ §aEnabled");
-            } else {
                 friendsList.remove(1);
                 friendsList.add(1, "§9§l♦ §cDisabled");
+            } else {
+                friendsList.remove(0);
+                friendsList.add(0, "§9§l♦ §aEnabled");
             }
         } else {
             friendsList.remove(0);
@@ -113,9 +114,10 @@ public class HubSettingsInsideInventory {
         ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1);
         ItemMeta friendsMeta = friends.getItemMeta();
 
-        friendsList.add("§a§aEnabled");
+        friendsList.add("§aEnabled");
         friendsList.add("§cDisabled");
 
+        if (friendsSQL.playerUUID != null) {
             if (friendsSQL.friendsStatus) {
                 friendsList.remove(0);
                 friendsList.add(0, "§9§l♦ §aEnabled");
@@ -125,6 +127,11 @@ public class HubSettingsInsideInventory {
                 friendsList.add(1, "§9§l♦ §cDisabled");
                 friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
             }
+        } else {
+            friendsList.remove(1);
+            friendsList.add(1, "§9§l♦ §cDisabled");
+            friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
+        }
 
         friendsMeta.setDisplayName("§9Friends requests");
         friendsMeta.setLore(friendsList);
