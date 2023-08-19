@@ -49,6 +49,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JeezyHubInventories(), this);
         getServer().getPluginManager().registerEvents(new DropItemsEvent(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlaceItemsEvent(), this);
     }
 
     @Override
