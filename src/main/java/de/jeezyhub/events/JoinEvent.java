@@ -5,6 +5,8 @@ import de.jeezyhub.scoreboard.Scoreboard;
 import de.jeezyhub.utils.BungeeChannelApi;
 import de.jeezyhub.utils.FakePlayerChecker;
 import fr.mrmicky.fastboard.FastBoard;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,6 +24,8 @@ public class JoinEvent implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoinEvent(PlayerJoinEvent e) {
         if (FakePlayerChecker.isFakePlayer(e.getPlayer())) return;
+
+        setPlayerVisibility(e);
 
         setHubItems(e);
 
@@ -54,5 +58,13 @@ public class JoinEvent implements Listener {
     private void setHubItems(PlayerJoinEvent e) {
         hubFrontInventory.setCompassOnJoin(e);
         hubFrontInventory.setSettingsOnJoin(e);
+        hubFrontInventory.setPlayerVisibilityOnJoin(e);
+    }
+
+    private void setPlayerVisibility(PlayerJoinEvent e) {
+        for (Player ps : Bukkit.getOnlinePlayers()) {
+            e.getPlayer().hidePlayer(ps);
+            ps.hidePlayer(e.getPlayer());
+        }
     }
 }

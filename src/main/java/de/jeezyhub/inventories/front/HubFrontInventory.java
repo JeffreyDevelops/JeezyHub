@@ -1,5 +1,6 @@
 package de.jeezyhub.inventories.front;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
@@ -23,6 +24,14 @@ public class HubFrontInventory {
             settings.setItemMeta(settingsMeta);
             playerInventory(e).setItem(8, settings);
         }
+
+    public void setPlayerVisibilityOnJoin(PlayerJoinEvent e) {
+        ItemStack playerVisibility = new ItemStack(Material.INK_SACK, 1, (byte) 10);
+        ItemMeta playerVisibilityMeta = playerVisibility.getItemMeta();
+        playerVisibilityMeta.setDisplayName("§9Player Visibility §7(§aEnabled§7)");
+        playerVisibility.setItemMeta(playerVisibilityMeta);
+        playerInventory(e).setItem(0, playerVisibility);
+    }
 
         private Inventory playerInventory(PlayerJoinEvent e) {
             e.getPlayer().getInventory().setHeldItemSlot(4);
