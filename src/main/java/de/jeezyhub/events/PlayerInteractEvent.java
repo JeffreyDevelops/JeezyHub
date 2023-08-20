@@ -14,15 +14,20 @@ public class PlayerInteractEvent implements Listener {
 
     @EventHandler
     public void onPlayerInteraction(org.bukkit.event.player.PlayerInteractEvent e) {
-        if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-        switch (e.getItem().getItemMeta().getDisplayName()) {
-            case "§9Gamemodes":
-                hubCompassInsideInventory.openInv(e);
-                break;
-            case "§9Settings":
-                hubSettingsInsideInventory.openInv(e);
-                break;
+
+        if (e.getItem() == null || e.getItem().getItemMeta() == null) {
+            return;
         }
+
+        if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                switch (e.getItem().getItemMeta().getDisplayName()) {
+                    case "§9Gamemodes":
+                        hubCompassInsideInventory.openInv(e);
+                        break;
+                    case "§9Settings":
+                        hubSettingsInsideInventory.openInv(e);
+                        break;
+                }
         }
     }
 }
