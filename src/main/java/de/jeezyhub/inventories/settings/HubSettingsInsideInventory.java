@@ -64,23 +64,28 @@ public class HubSettingsInsideInventory {
         ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1);
         ItemMeta friendsMeta = friends.getItemMeta();
 
-        friendsList.add("§a§aEnabled");
-        friendsList.add("§cDisabled");
+        friendsList.add("§fManage your §9friends §frequests.");
+        friendsList.add("");
+        friendsList.add("§fCurrently:");
+        friendsList.add("");
+        friendsList.add("");
+        friendsList.add("§f§m-------------------------------");
+        friendsList.add("§7Click to toggle friends requests.");
 
         System.out.println(friendsSQL.friendsStatus);
         System.out.println(friendsSQL.playerUUID);
 
         if (friendsSQL.playerUUID != null) {
             if (friendsSQL.friendsStatus) {
-                friendsList.remove(1);
-                friendsList.add(1, "§9§l♦ §cDisabled");
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §cDisabled");
             } else {
-                friendsList.remove(0);
-                friendsList.add(0, "§9§l♦ §aEnabled");
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §aEnabled");
             }
         } else {
-            friendsList.remove(0);
-            friendsList.add(0, "§9§l♦ §aEnabled");
+            friendsList.remove(3);
+            friendsList.add(3, "§9§l♦ §aEnabled");
         }
 
         friendsMeta.setDisplayName("§9Friends requests");
@@ -93,15 +98,20 @@ public class HubSettingsInsideInventory {
         ItemStack privateMsg = new ItemStack(Material.BOOK, 1);
         ItemMeta privateMsgMeta = privateMsg.getItemMeta();
 
-        privateMsgList.add("§aEnabled");
-        privateMsgList.add("§cDisabled");
+        privateMsgList.add("§fManage your §9private §fmessages.");
+        privateMsgList.add("");
+        privateMsgList.add("§fCurrently:");
+        privateMsgList.add("");
+        privateMsgList.add("");
+        privateMsgList.add("§f§m-------------------------------");
+        privateMsgList.add("§7Click to toggle private messages.");
 
         if (settingsSQL.settingsMsg) {
-            privateMsgList.remove(1);
-            privateMsgList.add(1, "§9§l♦ §cDisabled");
+            privateMsgList.remove(3);
+            privateMsgList.add(3, "§9§l♦ §cDisabled");
         } else {
-            privateMsgList.remove(0);
-            privateMsgList.add(0, "§9§l♦ §aEnabled");
+            privateMsgList.remove(3);
+            privateMsgList.add(3, "§9§l♦ §aEnabled");
         }
 
         privateMsgMeta.setDisplayName("§9Private messages");
@@ -114,22 +124,27 @@ public class HubSettingsInsideInventory {
         ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1);
         ItemMeta friendsMeta = friends.getItemMeta();
 
-        friendsList.add("§aEnabled");
-        friendsList.add("§cDisabled");
+        friendsList.add("§fManage your §9friends §frequests.");
+        friendsList.add("");
+        friendsList.add("§fCurrently:");
+        friendsList.add("");
+        friendsList.add("");
+        friendsList.add("§f§m-------------------------------");
+        friendsList.add("§7Click to toggle friends requests.");
 
         if (friendsSQL.playerUUID != null) {
             if (friendsSQL.friendsStatus) {
-                friendsList.remove(0);
-                friendsList.add(0, "§9§l♦ §aEnabled");
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §aEnabled");
                 friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(false), "§aenabled");
             } else {
-                friendsList.remove(1);
-                friendsList.add(1, "§9§l♦ §cDisabled");
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §cDisabled");
                 friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
             }
         } else {
-            friendsList.remove(1);
-            friendsList.add(1, "§9§l♦ §cDisabled");
+            friendsList.remove(3);
+            friendsList.add(3, "§9§l♦ §cDisabled");
             friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
         }
 
@@ -143,15 +158,20 @@ public class HubSettingsInsideInventory {
         ItemStack privateMsg = new ItemStack(Material.BOOK, 1);
         ItemMeta privateMsgMeta = privateMsg.getItemMeta();
 
-        privateMsgList.add("§aEnabled");
-        privateMsgList.add("§cDisabled");
+        privateMsgList.add("§fManage your §9private §fmessages.");
+        privateMsgList.add("");
+        privateMsgList.add("§fCurrently:");
+        privateMsgList.add("");
+        privateMsgList.add("");
+        privateMsgList.add("§f§m-------------------------------");
+        privateMsgList.add("§7Click to toggle private messages.");
 
         if (settingsSQL.settingsMsg) {
-            privateMsgList.remove(1);
-            privateMsgList.add(1, "§9§l♦ §cDisabled");
+            privateMsgList.remove(3);
+            privateMsgList.add(3, "§9§l♦ §cDisabled");
         } else {
-            privateMsgList.remove(0);
-            privateMsgList.add(0, "§9§l♦ §aEnabled");
+            privateMsgList.remove(3);
+            privateMsgList.add(3, "§9§l♦ §aEnabled");
         }
 
         privateMsgMeta.setDisplayName("§9Private messages");
