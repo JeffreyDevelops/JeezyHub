@@ -63,7 +63,7 @@ public class HubCompassInsideInventory {
             @Override
             public void run() {
                 try {
-                    this.sleep(40);
+                    this.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -80,13 +80,13 @@ public class HubCompassInsideInventory {
     public void openInv(org.bukkit.event.player.PlayerInteractEvent e) {
         createInventory();
         setPlaceHolders();
-        perPlayerInventory.put(e.getPlayer().getUniqueId(), hubInsideInventory);
         setActualItem(e);
+        perPlayerInventory.put(e.getPlayer().getUniqueId(), hubInsideInventory);
         new Thread() {
             @Override
             public void run() {
                 try {
-                    this.sleep(40);
+                    this.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
