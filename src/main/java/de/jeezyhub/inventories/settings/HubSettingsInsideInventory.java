@@ -24,17 +24,29 @@ public class HubSettingsInsideInventory {
 
     List<String> friendsList = new ArrayList<>();
 
+    List<String> friendsSoundList = new ArrayList<>();
+
+    List<String> privateMsgSoundList = new ArrayList<>();
+
     public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
         if (e.getInventory().getTitle().contains("§9Settings")) {
             switch (e.getCurrentItem().getItemMeta().getDisplayName()) {
                 case "§9Friends requests":
-                    friendsSQL.getFriendsStatus((Player) e.getWhoClicked());
+                    settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     friendsItemOnClick(e);
+                    break;
+                case "§9Friends Sound":
+                    settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
+                    friendsSoundItemOnClick(e);
                     break;
                 case "§9Private messages":
                     Bukkit.getPlayer(e.getWhoClicked().getUniqueId()).performCommand("tpm");
                     settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     privateMessageOnClick(e);
+                    break;
+                case "§9PM Sound":
+                    settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
+                    privateMessageSoundOnClick(e);
                     break;
             }
         }
@@ -72,16 +84,13 @@ public class HubSettingsInsideInventory {
         friendsList.add("§f§m-------------------------------");
         friendsList.add("§7Click to toggle friends requests.");
 
-        System.out.println(friendsSQL.friendsStatus);
-        System.out.println(friendsSQL.playerUUID);
-
-        if (friendsSQL.playerUUID != null) {
-            if (friendsSQL.friendsStatus) {
-                friendsList.remove(3);
-                friendsList.add(3, "§9§l♦ §cDisabled");
-            } else {
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.friendsRequests) {
                 friendsList.remove(3);
                 friendsList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §cDisabled");
             }
         } else {
             friendsList.remove(3);
@@ -91,33 +100,7 @@ public class HubSettingsInsideInventory {
         friendsMeta.setDisplayName("§9Friends requests");
         friendsMeta.setLore(friendsList);
         friends.setItemMeta(friendsMeta);
-        HubSettingsInsideInventory.setItem(3, friends);
-    }
-
-    private void privateMessageOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-        ItemStack privateMsg = new ItemStack(Material.BOOK, 1);
-        ItemMeta privateMsgMeta = privateMsg.getItemMeta();
-
-        privateMsgList.add("§fManage your §9private §fmessages.");
-        privateMsgList.add("");
-        privateMsgList.add("§fCurrently:");
-        privateMsgList.add("");
-        privateMsgList.add("");
-        privateMsgList.add("§f§m-------------------------------");
-        privateMsgList.add("§7Click to toggle private messages.");
-
-        if (settingsSQL.settingsMsg) {
-            privateMsgList.remove(3);
-            privateMsgList.add(3, "§9§l♦ §cDisabled");
-        } else {
-            privateMsgList.remove(3);
-            privateMsgList.add(3, "§9§l♦ §aEnabled");
-        }
-
-        privateMsgMeta.setDisplayName("§9Private messages");
-        privateMsgMeta.setLore(privateMsgList);
-        privateMsg.setItemMeta(privateMsgMeta);
-        settingsMap.get((Player) e.getWhoClicked()).setItem(5, privateMsg);
+        HubSettingsInsideInventory.setItem(1, friends);
     }
 
     private void friendsItemOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
@@ -132,27 +115,96 @@ public class HubSettingsInsideInventory {
         friendsList.add("§f§m-------------------------------");
         friendsList.add("§7Click to toggle friends requests.");
 
-        if (friendsSQL.playerUUID != null) {
-            if (friendsSQL.friendsStatus) {
-                friendsList.remove(3);
-                friendsList.add(3, "§9§l♦ §aEnabled");
-                friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(false), "§aenabled");
-            } else {
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.friendsRequests) {
                 friendsList.remove(3);
                 friendsList.add(3, "§9§l♦ §cDisabled");
-                friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
+                friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(false), "§cdisabled");
+            } else {
+                friendsList.remove(3);
+                friendsList.add(3, "§9§l♦ §aEnabled");
+                friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§2enabled");
             }
         } else {
             friendsList.remove(3);
             friendsList.add(3, "§9§l♦ §cDisabled");
-            friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(true), "§cdisabled");
+            friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(false), "§cdisabled");
         }
 
         friendsMeta.setDisplayName("§9Friends requests");
         friendsMeta.setLore(friendsList);
         friends.setItemMeta(friendsMeta);
+        settingsMap.get((Player) e.getWhoClicked()).setItem(1, friends);
+    }
+
+    private void friendsSoundItem() {
+        ItemStack friends = new ItemStack(Material.NOTE_BLOCK, 1);
+        ItemMeta friendsMeta = friends.getItemMeta();
+
+        friendsSoundList.add("§fManage your §9friends §fSound.");
+        friendsSoundList.add("");
+        friendsSoundList.add("§fCurrently:");
+        friendsSoundList.add("");
+        friendsSoundList.add("");
+        friendsSoundList.add("§f§m-------------------------------");
+        friendsSoundList.add("§7Click to toggle friends sound.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsFriendsSound) {
+                friendsSoundList.remove(3);
+                friendsSoundList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                friendsSoundList.remove(3);
+                friendsSoundList.add(3, "§9§l♦ §cDisabled");
+            }
+        } else {
+            friendsSoundList.remove(3);
+            friendsSoundList.add(3, "§9§l♦ §aEnabled");
+        }
+
+        friendsMeta.setDisplayName("§9Friends Sound");
+        friendsMeta.setLore(friendsSoundList);
+        friends.setItemMeta(friendsMeta);
+        HubSettingsInsideInventory.setItem(3, friends);
+    }
+
+    private void friendsSoundItemOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        ItemStack friends = new ItemStack(Material.NOTE_BLOCK, 1);
+        ItemMeta friendsMeta = friends.getItemMeta();
+
+        friendsSoundList.add("§fManage your §9friends §fSound.");
+        friendsSoundList.add("");
+        friendsSoundList.add("§fCurrently:");
+        friendsSoundList.add("");
+        friendsSoundList.add("");
+        friendsSoundList.add("§f§m-------------------------------");
+        friendsSoundList.add("§7Click to toggle friends sound.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsFriendsSound) {
+                friendsSoundList.remove(3);
+                friendsSoundList.add(3, "§9§l♦ §cDisabled");
+                settingsSQL.disableFriendsSound((Player) e.getWhoClicked());
+                e.getWhoClicked().sendMessage("§7You successfully §cdisabled §7friends message §9sounds§7.");
+            } else {
+                friendsSoundList.remove(3);
+                friendsSoundList.add(3, "§9§l♦ §aEnabled");
+                settingsSQL.enableFriendsSound((Player) e.getWhoClicked());
+                e.getWhoClicked().sendMessage("§7You successfully §2enabled §7friends message §9sounds§7.");
+            }
+        } else {
+            friendsSoundList.remove(3);
+            friendsSoundList.add(3, "§9§l♦ §cDisabled");
+            settingsSQL.disableFriendsSound((Player) e.getWhoClicked());
+            e.getWhoClicked().sendMessage("§7You successfully §cdisabled §7friends message §9sounds§7.");
+        }
+
+        friendsMeta.setDisplayName("§9Friends Sound");
+        friendsMeta.setLore(friendsSoundList);
+        friends.setItemMeta(friendsMeta);
         settingsMap.get((Player) e.getWhoClicked()).setItem(3, friends);
     }
+
 
     private void privateMessageItem() {
         ItemStack privateMsg = new ItemStack(Material.BOOK, 1);
@@ -166,9 +218,14 @@ public class HubSettingsInsideInventory {
         privateMsgList.add("§f§m-------------------------------");
         privateMsgList.add("§7Click to toggle private messages.");
 
-        if (settingsSQL.settingsMsg) {
-            privateMsgList.remove(3);
-            privateMsgList.add(3, "§9§l♦ §cDisabled");
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsMsg) {
+                privateMsgList.remove(3);
+                privateMsgList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                privateMsgList.remove(3);
+                privateMsgList.add(3, "§9§l♦ §cDisabled");
+            }
         } else {
             privateMsgList.remove(3);
             privateMsgList.add(3, "§9§l♦ §aEnabled");
@@ -181,11 +238,115 @@ public class HubSettingsInsideInventory {
     }
 
 
+    private void privateMessageOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        ItemStack privateMsg = new ItemStack(Material.BOOK, 1);
+        ItemMeta privateMsgMeta = privateMsg.getItemMeta();
+
+        privateMsgList.add("§fManage your §9private §fmessages.");
+        privateMsgList.add("");
+        privateMsgList.add("§fCurrently:");
+        privateMsgList.add("");
+        privateMsgList.add("");
+        privateMsgList.add("§f§m-------------------------------");
+        privateMsgList.add("§7Click to toggle private messages.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsMsg) {
+                privateMsgList.remove(3);
+                privateMsgList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                privateMsgList.remove(3);
+                privateMsgList.add(3, "§9§l♦ §cDisabled");
+            }
+        } else {
+            privateMsgList.remove(3);
+            privateMsgList.add(3, "§9§l♦ §aEnabled");
+        }
+
+        privateMsgMeta.setDisplayName("§9Private messages");
+        privateMsgMeta.setLore(privateMsgList);
+        privateMsg.setItemMeta(privateMsgMeta);
+        settingsMap.get((Player) e.getWhoClicked()).setItem(5, privateMsg);
+    }
+
+
+    private void privateMessageSound() {
+        ItemStack privateMsg = new ItemStack(Material.MELON_BLOCK, 1);
+        ItemMeta privateMsgMeta = privateMsg.getItemMeta();
+
+        privateMsgSoundList.add("§fManage your §9private §fmessages sound.");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("§fCurrently:");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("§f§m-------------------------------");
+        privateMsgSoundList.add("§7Click to toggle private message sound.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsPmSound) {
+                privateMsgSoundList.remove(3);
+                privateMsgSoundList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                privateMsgSoundList.remove(3);
+                privateMsgSoundList.add(3, "§9§l♦ §cDisabled");
+            }
+        } else {
+            privateMsgSoundList.remove(3);
+            privateMsgSoundList.add(3, "§9§l♦ §aEnabled");
+        }
+
+        privateMsgMeta.setDisplayName("§9PM Sound");
+        privateMsgMeta.setLore(privateMsgSoundList);
+        privateMsg.setItemMeta(privateMsgMeta);
+        HubSettingsInsideInventory.setItem(7, privateMsg);
+    }
+
+    private void privateMessageSoundOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        ItemStack privateMsg = new ItemStack(Material.MELON_BLOCK, 1);
+        ItemMeta privateMsgMeta = privateMsg.getItemMeta();
+
+        privateMsgSoundList.add("§fManage your §9private §fmessages sound.");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("§fCurrently:");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("");
+        privateMsgSoundList.add("§f§m-------------------------------");
+        privateMsgSoundList.add("§7Click to toggle private message sound.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsPmSound) {
+                privateMsgSoundList.remove(3);
+                privateMsgSoundList.add(3, "§9§l♦ §cDisabled");
+                settingsSQL.disablePmSound((Player) e.getWhoClicked());
+                e.getWhoClicked().sendMessage("§7You successfully §cdisabled §7private message §9sounds§7.");
+            } else {
+                privateMsgSoundList.remove(3);
+                privateMsgSoundList.add(3, "§9§l♦ §aEnabled");
+                settingsSQL.enablePmSound((Player) e.getWhoClicked());
+                e.getWhoClicked().sendMessage("§7You successfully §2enabled §7private message §9sounds§7.");
+            }
+        } else {
+            privateMsgSoundList.remove(3);
+            privateMsgSoundList.add(3, "§9§l♦ §cDisabled");
+            settingsSQL.disablePmSound((Player) e.getWhoClicked());
+            e.getWhoClicked().sendMessage("§7You successfully §cdisabled §7private message §9sounds§7.");
+        }
+
+
+        privateMsgMeta.setDisplayName("§9PM Sound");
+        privateMsgMeta.setLore(privateMsgSoundList);
+        privateMsg.setItemMeta(privateMsgMeta);
+        settingsMap.get((Player) e.getWhoClicked()).setItem(7, privateMsg);
+    }
+
+
+
     private void setInnerItems(org.bukkit.event.player.PlayerInteractEvent e) {
         settingsSQL.getSettingsData(e.getPlayer().getUniqueId());
-        friendsSQL.getFriendsStatus(e.getPlayer());
         friendsItem();
+        friendsSoundItem();
         privateMessageItem();
+        privateMessageSound();
     }
 
 
@@ -196,6 +357,8 @@ public class HubSettingsInsideInventory {
         settingsMap.put(e.getPlayer(), HubSettingsInsideInventory);
         e.getPlayer().openInventory(settingsMap.get(e.getPlayer()));
         privateMsgList.clear();
+        privateMsgSoundList.clear();
         friendsList.clear();
+        friendsSoundList.clear();
     }
 }
