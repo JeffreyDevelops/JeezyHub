@@ -97,7 +97,7 @@ public class HubSettingsInsideInventory {
             friendsList.add(3, "§9§l♦ §aEnabled");
         }
 
-        friendsMeta.setDisplayName("§9Friends requests");
+        friendsMeta.setDisplayName("§9Friends Requests");
         friendsMeta.setLore(friendsList);
         friends.setItemMeta(friendsMeta);
         HubSettingsInsideInventory.setItem(1, friends);
@@ -131,7 +131,7 @@ public class HubSettingsInsideInventory {
             friendsSQL.friendsSwitcherMYSQL((Player) e.getWhoClicked(), String.valueOf(false), "§cdisabled");
         }
 
-        friendsMeta.setDisplayName("§9Friends requests");
+        friendsMeta.setDisplayName("§9Friends Requests");
         friendsMeta.setLore(friendsList);
         friends.setItemMeta(friendsMeta);
         settingsMap.get((Player) e.getWhoClicked()).setItem(1, friends);
@@ -141,7 +141,7 @@ public class HubSettingsInsideInventory {
         ItemStack friends = new ItemStack(Material.NOTE_BLOCK, 1);
         ItemMeta friendsMeta = friends.getItemMeta();
 
-        friendsSoundList.add("§fManage your §9friends §fSound.");
+        friendsSoundList.add("§fManage your §9friends §fsound.");
         friendsSoundList.add("");
         friendsSoundList.add("§fCurrently:");
         friendsSoundList.add("");
@@ -172,7 +172,7 @@ public class HubSettingsInsideInventory {
         ItemStack friends = new ItemStack(Material.NOTE_BLOCK, 1);
         ItemMeta friendsMeta = friends.getItemMeta();
 
-        friendsSoundList.add("§fManage your §9friends §fSound.");
+        friendsSoundList.add("§fManage your §9friends §fsound.");
         friendsSoundList.add("");
         friendsSoundList.add("§fCurrently:");
         friendsSoundList.add("");
@@ -231,7 +231,7 @@ public class HubSettingsInsideInventory {
             privateMsgList.add(3, "§9§l♦ §aEnabled");
         }
 
-        privateMsgMeta.setDisplayName("§9Private messages");
+        privateMsgMeta.setDisplayName("§9Private Messages");
         privateMsgMeta.setLore(privateMsgList);
         privateMsg.setItemMeta(privateMsgMeta);
         HubSettingsInsideInventory.setItem(5, privateMsg);
@@ -263,7 +263,7 @@ public class HubSettingsInsideInventory {
             privateMsgList.add(3, "§9§l♦ §aEnabled");
         }
 
-        privateMsgMeta.setDisplayName("§9Private messages");
+        privateMsgMeta.setDisplayName("§9Private Messages");
         privateMsgMeta.setLore(privateMsgList);
         privateMsg.setItemMeta(privateMsgMeta);
         settingsMap.get((Player) e.getWhoClicked()).setItem(5, privateMsg);
