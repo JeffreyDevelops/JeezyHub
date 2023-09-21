@@ -24,6 +24,8 @@ public class HubSettingsInsideInventory {
 
     List<String> friendsList = new ArrayList<>();
 
+    List<String> globalChatList = new ArrayList<>();
+
     List<String> friendsSoundList = new ArrayList<>();
 
     List<String> privateMsgSoundList = new ArrayList<>();
@@ -31,7 +33,7 @@ public class HubSettingsInsideInventory {
     public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
         if (e.getInventory().getTitle().contains("§9Settings")) {
             switch (e.getCurrentItem().getItemMeta().getDisplayName()) {
-                case "§9Friends requests":
+                case "§9Friends Requests":
                     settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     friendsItemOnClick(e);
                     break;
@@ -39,7 +41,7 @@ public class HubSettingsInsideInventory {
                     settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     friendsSoundItemOnClick(e);
                     break;
-                case "§9Private messages":
+                case "§9Private Messages":
                     Bukkit.getPlayer(e.getWhoClicked().getUniqueId()).performCommand("tpm");
                     settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     privateMessageOnClick(e);
@@ -48,6 +50,10 @@ public class HubSettingsInsideInventory {
                     settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
                     privateMessageSoundOnClick(e);
                     break;
+                case "§9Global Chat":
+                    settingsSQL.getSettingsData(e.getWhoClicked().getUniqueId());
+                    globalChatOnClick(e);
+                    break;
             }
         }
         e.setCancelled(true);
@@ -55,7 +61,7 @@ public class HubSettingsInsideInventory {
 
 
     private void createInventory() {
-        HubSettingsInsideInventory = Bukkit.createInventory(null, 9, "§9Settings");
+        HubSettingsInsideInventory = Bukkit.createInventory(null, 18, "§9Settings");
     }
 
 
@@ -73,7 +79,7 @@ public class HubSettingsInsideInventory {
     }
 
     private void friendsItem() {
-        ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1);
+        ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         ItemMeta friendsMeta = friends.getItemMeta();
 
         friendsList.add("§fManage your §9friends §frequests.");
@@ -104,7 +110,7 @@ public class HubSettingsInsideInventory {
     }
 
     private void friendsItemOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-        ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1);
+        ItemStack friends = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         ItemMeta friendsMeta = friends.getItemMeta();
 
         friendsList.add("§fManage your §9friends §frequests.");
@@ -340,6 +346,73 @@ public class HubSettingsInsideInventory {
     }
 
 
+    private void globalChatItem() {
+        ItemStack globalChat = new ItemStack(Material.SIGN, 1);
+        ItemMeta globalChatItemMeta = globalChat.getItemMeta();
+
+        globalChatList.add("§fManage your §9global §fchat.");
+        globalChatList.add("");
+        globalChatList.add("§fCurrently:");
+        globalChatList.add("");
+        globalChatList.add("");
+        globalChatList.add("§f§m-------------------------------");
+        globalChatList.add("§7Click to toggle global chat.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsGlobalChat) {
+                globalChatList.remove(3);
+                globalChatList.add(3, "§9§l♦ §aEnabled");
+            } else {
+                globalChatList.remove(3);
+                globalChatList.add(3, "§9§l♦ §cDisabled");
+            }
+        } else {
+            globalChatList.remove(3);
+            globalChatList.add(3, "§9§l♦ §aEnabled");
+        }
+
+        globalChatItemMeta.setDisplayName("§9Global Chat");
+        globalChatItemMeta.setLore(globalChatList);
+        globalChat.setItemMeta(globalChatItemMeta);
+        HubSettingsInsideInventory.setItem(13, globalChat);
+    }
+
+
+    private void globalChatOnClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        ItemStack globalChat = new ItemStack(Material.SIGN, 1);
+        ItemMeta globalChatItemMeta = globalChat.getItemMeta();
+
+        globalChatList.add("§fManage your §9global §fchat.");
+        globalChatList.add("");
+        globalChatList.add("§fCurrently:");
+        globalChatList.add("");
+        globalChatList.add("");
+        globalChatList.add("§f§m-------------------------------");
+        globalChatList.add("§7Click to toggle global chat.");
+
+        if (settingsSQL.playerUUID != null) {
+            if (settingsSQL.settingsGlobalChat) {
+                globalChatList.remove(3);
+                globalChatList.add(3, "§9§l♦ §cDisabled");
+                settingsSQL.disableGlobalChat((Player) e.getWhoClicked());
+            } else {
+                globalChatList.remove(3);
+                globalChatList.add(3, "§9§l♦ §aEnabled");
+                settingsSQL.enableGlobalChat((Player) e.getWhoClicked());
+            }
+        } else {
+            globalChatList.remove(3);
+            globalChatList.add(3, "§9§l♦ §cDisabled");
+            settingsSQL.disableGlobalChat((Player) e.getWhoClicked());
+        }
+
+        globalChatItemMeta.setDisplayName("§9Global Chat");
+        globalChatItemMeta.setLore(globalChatList);
+        globalChat.setItemMeta(globalChatItemMeta);
+        settingsMap.get((Player) e.getWhoClicked()).setItem(13, globalChat);
+    }
+
+
 
     private void setInnerItems(org.bukkit.event.player.PlayerInteractEvent e) {
         settingsSQL.getSettingsData(e.getPlayer().getUniqueId());
@@ -347,6 +420,7 @@ public class HubSettingsInsideInventory {
         friendsSoundItem();
         privateMessageItem();
         privateMessageSound();
+        globalChatItem();
     }
 
 
@@ -360,5 +434,6 @@ public class HubSettingsInsideInventory {
         privateMsgSoundList.clear();
         friendsList.clear();
         friendsSoundList.clear();
+        globalChatList.clear();
     }
 }
