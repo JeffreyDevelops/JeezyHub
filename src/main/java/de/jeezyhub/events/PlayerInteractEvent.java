@@ -20,7 +20,7 @@ public class PlayerInteractEvent implements Listener {
     @EventHandler
     public void onPlayerInteraction(org.bukkit.event.player.PlayerInteractEvent e) {
 
-        if (e.getItem() == null || e.getItem().getItemMeta() == null) {
+        if (e.getItem() == null || e.getItem().getItemMeta() == null || e.getItem().getItemMeta().getDisplayName() == null) {
             return;
         }
 
