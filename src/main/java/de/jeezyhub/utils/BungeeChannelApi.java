@@ -8,8 +8,8 @@ public class BungeeChannelApi {
     public static int selectedPlayerCount = 0;
     io.github.leonardosnt.bungeechannelapi.BungeeChannelApi api = io.github.leonardosnt.bungeechannelapi.BungeeChannelApi.of(Main.getPlugin(Main.class));
 
-    public void sendToServer(Player p) {
-        api.connect(p, "practice-NA");
+    public void sendToServer(Player p, String serverName) {
+        api.connect(p, serverName);
     }
 
     public int allPlayerCount() {
@@ -23,13 +23,18 @@ public class BungeeChannelApi {
     return allPlayerCount;
     }
 
-    public void getSelectedPlayerCount() {
+    public void getSelectedPlayerCount(String serverName) {
         try {
-            api.getPlayerCount("practice-NA")
+            api.getPlayerCount(serverName)
                     .whenComplete((oneServerPlayerCount, error) -> {
                         selectedPlayerCount = oneServerPlayerCount;
                     });
         } catch (Exception e) {
         }
+    }
+
+    public Integer receivedServerCount(String serverName) {
+        this.getSelectedPlayerCount(serverName);
+        return selectedPlayerCount;
     }
 }

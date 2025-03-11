@@ -12,7 +12,7 @@ public class HubFrontInventory {
         public void setCompassOnJoin(PlayerJoinEvent e) {
             ItemStack selector = new ItemStack(Material.COMPASS, 1);
             ItemMeta selectorMeta = selector.getItemMeta();
-            selectorMeta.setDisplayName("§9Gamemodes");
+            selectorMeta.setDisplayName("§9§lGamemodes");
             selector.setItemMeta(selectorMeta);
             playerInventory(e).setItem(4, selector);
         }

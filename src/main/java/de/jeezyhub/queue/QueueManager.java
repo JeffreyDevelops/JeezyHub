@@ -14,15 +14,17 @@ import static de.jeezyhub.utils.ArrayStorage.*;
 public class QueueManager {
     BungeeChannelApi bungeeChannelApi = new BungeeChannelApi();
 
-    public void add(org.bukkit.event.inventory.InventoryClickEvent e) {
+    public void add(org.bukkit.event.inventory.InventoryClickEvent e, String serverName) {
         if (inQueue(e)) return;
         if (e.getWhoClicked().hasPermission("jeezy.hub.bypass.queue")) {
-            bungeeChannelApi.sendToServer((Player) e.getWhoClicked());
+            bungeeChannelApi.sendToServer((Player) e.getWhoClicked(), serverName);
             return;
         }
         queueStorage.add((Player) e.getWhoClicked());
+        queueServer.add(serverName);
         System.out.println(queueStorage);
         e.getWhoClicked().sendMessage("§7You §2successfully §7entered the queue place: §7[§9"+(queueStorage.size())+"§7].");
+        e.getWhoClicked().closeInventory();
 
         Scoreboard scoreboard = new Scoreboard();
         FastBoard board = new FastBoard((Player) e.getWhoClicked());
@@ -39,6 +41,7 @@ public class QueueManager {
 
     private void remove(int index) {
         queueStorage.remove(queueStorage.get(index));
+        queueServer.remove(index);
     }
 
     private boolean inQueue(org.bukkit.event.inventory.InventoryClickEvent e) {
@@ -52,8 +55,8 @@ public class QueueManager {
         return queueStorage.indexOf(p.getPlayer()) + 1;
     }
 
-    private void sendToServer(int index) {
-        bungeeChannelApi.sendToServer(queueStorage.get(index));
+    private void sendToServer(int index, String serverName) {
+        bungeeChannelApi.sendToServer(queueStorage.get(index), serverName);
     }
 
 
@@ -71,7 +74,7 @@ public class QueueManager {
                     return;
                 }
 
-                sendToServer(indexAddUp);
+                sendToServer(indexAddUp, queueServer.get(indexAddUp));
                 remove(indexAddUp);
                 indexAddUp--;
                 indexAddUp++;

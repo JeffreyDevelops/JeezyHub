@@ -1,18 +1,23 @@
 package de.jeezyhub.inventories.compass;
 
+import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.server.ServerInfo;
+import com.velocitypowered.api.proxy.server.ServerPing;
+import de.jeezyhub.inventories.compass.practice.HubPracticeInventory;
 import de.jeezyhub.queue.QueueManager;
 import de.jeezyhub.utils.BungeeChannelApi;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
-import static de.jeezyhub.utils.ArrayStorage.perPlayerInventory;
-import static de.jeezyhub.utils.ArrayStorage.perPlayerInventoryOpened;
-import static de.jeezyhub.utils.BungeeChannelApi.selectedPlayerCount;
+import static de.jeezyhub.utils.ArrayStorage.*;
 
 public class HubCompassInsideInventory {
 
@@ -24,18 +29,46 @@ public class HubCompassInsideInventory {
 
     QueueManager queueManager = new QueueManager();
 
-    public void run(org.bukkit.event.inventory.InventoryClickEvent e) {
-        if (e.getInventory().getTitle().contains("§9§lGame§f§lmodes")) {
+    HubPracticeInventory hubPracticeInventory = new HubPracticeInventory();
+
+    public void run(org.bukkit.event.inventory.InventoryClickEvent e) throws UnknownHostException {
+        if (e.getInventory().getTitle().contains("§9§lGamemodes")) {
             if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§9§lPractice")) {
-                queueManager.add(e);
+                hubPracticeInventory.openInv(e);
+            }
+
+        } else if (e.getInventory().getTitle().contains("§7Server §9§l> §9§lPractice")) {
+            if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§9§lNA Practice")) {
+                if (loginServer.get(e.getWhoClicked().getUniqueId()).startsWith("na")) {
+                    queueManager.add(e, "practice-NA");
+                } else {
+                    e.getWhoClicked().sendMessage("§cYou need to join through§7:\n" +
+                            "§9na.mineral.gg");
+                    e.getWhoClicked().closeInventory();
+                }
+
+            }
+            if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§9§lEU Practice")) {
+                if (loginServer.get(e.getWhoClicked().getUniqueId()).startsWith("eu")) {
+                    queueManager.add(e, "practice-EU");
+                } else {
+                    e.getWhoClicked().sendMessage("§cYou need to join through§7:\n" +
+                            "§9eu.mineral.gg");
+                    e.getWhoClicked().closeInventory();
+                }
+
+            }
+            if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§9§lSA Practice")) {
+                e.getWhoClicked().sendMessage("§cComing soon!");
                 e.getWhoClicked().closeInventory();
             }
         }
+
         e.setCancelled(true);
     }
 
     private void createInventory() {
-        hubInsideInventory = Bukkit.createInventory(null, 9, "§9§lGame§f§lmodes");
+        hubInsideInventory = Bukkit.createInventory(null, 9, "§9§lGamemodes");
     }
 
     private void setPlaceHolders() {
@@ -58,38 +91,21 @@ public class HubCompassInsideInventory {
         desc.add("§7PvPBots, 1v1s, 2v2s");
         desc.add("§7Duels, Events & Parties");
         desc.add("                          ");
-        bungeeChannelApi.getSelectedPlayerCount();
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    this.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                desc.add("§fPlayers: §9§l" + selectedPlayerCount);
+
+                desc.add("§fPlayers: §9§l" + bungeeChannelApi.receivedServerCount("practice-NA"));
                 desc.add("                          ");
                 desc.add("§fClick to §9join§7!");
                 practiceMeta.setLore(desc);
                 practice.setItemMeta(practiceMeta);
                 perPlayerInventory.get(e.getPlayer().getUniqueId()).setItem(4, practice);
-            }
-        }.start();
+
     }
 
     public void openInv(org.bukkit.event.player.PlayerInteractEvent e) {
         createInventory();
         setPlaceHolders();
-        setActualItem(e);
         perPlayerInventory.put(e.getPlayer().getUniqueId(), hubInsideInventory);
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    this.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        setActualItem(e);
 
 
                 e.getPlayer().openInventory(perPlayerInventory.get(e.getPlayer().getUniqueId()));
@@ -101,10 +117,7 @@ public class HubCompassInsideInventory {
                     }
                 }
                 perPlayerInventoryOpened.put(e.getPlayer().getUniqueId(), true);
-                scheduleHubItems(e);
 
-            }
-        }.start();
 
     }
 

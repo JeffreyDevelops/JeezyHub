@@ -1,13 +1,21 @@
 package de.jeezyhub;
 
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import de.jeezyhub.colors.Color;
 import de.jeezyhub.events.*;
 import de.jeezyhub.inventories.JeezyHubInventories;
 import de.jeezyhub.queue.QueueManager;
 import de.jeezyhub.utils.BungeeChannelApi;
 import fr.mrmicky.fastboard.FastBoard;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+
 import static de.jeezyhub.utils.ArrayStorage.boards;
 import static de.jeezyhub.utils.ArrayStorage.boardsQueue;
 
@@ -39,6 +47,7 @@ public class Main extends JavaPlugin {
     }
 
     private void EventsRegister() {
+        getServer().getPluginManager().registerEvents(new PlayerLoginEvent(), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitEvent(), this);
         getServer().getPluginManager().registerEvents(new BreakBlocksEvent(), this);
@@ -52,8 +61,10 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlaceItemsEvent(), this);
     }
 
+
     @Override
     public void onDisable() {
         System.out.println(Color.WHITE_BOLD+"[JeezyHub]"+Color.RED_BOLD+" shutting down..."+Color.RESET);
     }
+
 }

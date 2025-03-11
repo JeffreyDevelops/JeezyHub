@@ -5,10 +5,12 @@ import de.jeezyhub.inventories.settings.HubSettingsInsideInventory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.net.UnknownHostException;
+
 @SuppressWarnings("SpellCheckingInspection")
 public class JeezyHubInventories implements Listener {
     @EventHandler
-    public void onCLickEvent(org.bukkit.event.inventory.InventoryClickEvent e) {
+    public void onCLickEvent(org.bukkit.event.inventory.InventoryClickEvent e) throws UnknownHostException {
         if (e.getCurrentItem() == null || e.getCurrentItem().getItemMeta() == null || e.getClickedInventory() == null) {
             return;
         }

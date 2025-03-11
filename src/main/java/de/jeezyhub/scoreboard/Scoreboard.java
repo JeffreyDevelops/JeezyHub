@@ -8,6 +8,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import static de.jeezycore.utils.ArrayStorage.friendsListData;
+import static de.jeezyhub.utils.ArrayStorage.loginServer;
 import static de.jeezyhub.utils.ArrayStorage.queueStorage;
 
 
@@ -47,7 +48,7 @@ public class Scoreboard {
                 " §9§l♦ §fRank§7: " + show_rank_color+ranksSQL.rankNameInformation,
                 " §9§l♦ §fFriends§7: " +"§2§l"+friendsSize,
                 "",
-                "§9mineral.gg",
+                "§9"+loginServer.get(e.getPlayer().getUniqueId()),
                 "§7§m-----------------"
         );
         friendsListData.clear();

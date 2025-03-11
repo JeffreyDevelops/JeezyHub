@@ -26,7 +26,7 @@ public class PlayerInteractEvent implements Listener {
 
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 switch (e.getItem().getItemMeta().getDisplayName()) {
-                    case "§9Gamemodes":
+                    case "§9§lGamemodes":
                         hubCompassInsideInventory.openInv(e);
                         break;
                     case "§9Settings":
